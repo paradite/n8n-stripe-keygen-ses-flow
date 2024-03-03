@@ -26,10 +26,11 @@ There is no guarantee that this flow will work for you.
 
 ### 1. Setup webhook to receive the event from Stripe.
 
-### 2. Validate the payment.
+### 2. Use If Node to validate the payment link.
 
 - Check `{{$json["body"]["data"]["object"]["payment_link"]}}` against your own payment link to make sure it's your payment link.
-- You might also want to do validation against Stripe API, but I didn't do it for simplicity.
+
+> You might also want to do validation against Stripe API, but I didn't do it for simplicity.
 
 ### 3. Generate license key using Keygen using `curl` command.
 
