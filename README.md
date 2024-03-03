@@ -1,6 +1,6 @@
 # n8n-stripe-keygen-ses-flow
 
-n8n flow for Stripe payment link + Keygen + AWS SES for license key issuing.
+n8n flow for Stripe payment link + Keygen + AWS SES for license key issuing that I built for [16x Prompt](https://prompt.16x.engineer/).
 
 Sensitive data has been masked in json file. You need to replace the masked data with your own data.
 
