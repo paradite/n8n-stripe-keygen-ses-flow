@@ -1,0 +1,311 @@
+{
+  "name": "Stripe Keygen",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "83ce24fb-51b9-47da-84bb-bbf0173445f9",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "d0eae096-7c6f-4319-8c70-da9ee849e632",
+        "options": {}
+      },
+      "id": "c17007de-3aea-4cbd-9af7-74a4c0fb398b",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        500
+      ],
+      "webhookId": "d0eae096-7c6f-4319-8c70-da9ee849e632"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"body\"][\"data\"][\"object\"][\"payment_link\"]}}",
+              "value2": "plink_123"
+            }
+          ]
+        }
+      },
+      "id": "64d9d9df-5b51-48cb-8870-519a00fb59f2",
+      "name": "IF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        460,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://api.keygen.sh/v1/accounts/123/licenses",
+        "options": {
+          "bodyContentType": "raw"
+        },
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Bearer prod-123"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.api+json"
+            }
+          ]
+        }
+      },
+      "id": "e6d61c22-9685-40fa-b86b-2f4bfbf8a46c",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        680,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "executeOnce": false,
+        "command": "=curl -X POST https://api.keygen.sh/v1/accounts/123/licenses \\\n  -H 'Content-Type: application/vnd.api+json' \\\n  -H 'Accept: application/vnd.api+json' \\\n  -H 'Authorization: Bearer prod-123' \\\n  -d '{\n        \"data\": {\n          \"type\": \"licenses\",\n          \"relationships\": {\n            \"policy\": {\n              \"data\": { \"type\": \"policies\", \"id\": \"123\" }\n            }\n          },\n          \"attributes\": {\n            \"metadata\": {\n              \"customerEmail\": \"{{$node[\"Webhook\"].json[\"body\"][\"data\"][\"object\"][\"customer_details\"][\"email\"]}}\"\n            }\n          }\n        }\n      }'"
+      },
+      "id": "0ac27751-bacf-4b0b-9d49-bc996e5d3d89",
+      "name": "Execute Command",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        680,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "subject": "ABC License",
+        "body": "=Here is your license key for ABC:\n\n{{ $item(\"0\").$node[\"Function\"].json[\"stdoutObj\"][\"data\"][\"attributes\"][\"key\"] }}\n\nThis is an automated email, please do not reply to this email.\n\nFor any issues, please contact us at https://abc.com/contact\n\nRegards,\nABC",
+        "fromEmail": "noreply@abc.xyz",
+        "toAddresses": [
+          "={{$node[\"Webhook\"].json[\"body\"][\"data\"][\"object\"][\"customer_details\"][\"email\"]}}"
+        ],
+        "additionalFields": {}
+      },
+      "id": "c13ffd75-b213-4b70-919d-416bb0dbdcfa",
+      "name": "AWS SES",
+      "type": "n8n-nodes-base.awsSes",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        360
+      ],
+      "credentials": {
+        "aws": {
+          "id": "2",
+          "name": "AWS account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Code here will run only once, no matter how many input items there are.\n// More info and help: https://docs.n8n.io/nodes/n8n-nodes-base.function\n// Tip: You can use luxon for dates and $jmespath for querying JSON structures\n\n// Loop over inputs and add a new field called 'myNewField' to the JSON of each one\nfor (item of items) {\n  if(item.json.stdout) {\n    item.json.stdoutObj = JSON.parse(item.json.stdout);\n  }\n}\n\n// You can write logs to the browser console\nconsole.log('Done!');\n\nreturn items;"
+      },
+      "id": "a901a1bf-1b54-41b0-96ee-9cc63367f6cf",
+      "name": "Function",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        900,
+        360
+      ]
+    }
+  ],
+  "pinData": {
+    "Start": [
+      {
+        "json": {
+          "headers": {
+            "host": "127.0.0.1:5678",
+            "connection": "close",
+            "content-length": "2861",
+            "content-type": "application/json; charset=utf-8",
+            "cache-control": "no-cache",
+            "user-agent": "Stripe/1.0 (+https://stripe.com/docs/webhooks)",
+            "accept": "*/*; q=0.5, application/xml",
+            "stripe-signature": "xyz"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "id": "evt_123",
+            "object": "event",
+            "api_version": "2020-08-27",
+            "created": 1694345825,
+            "data": {
+              "object": {
+                "id": "cs_test_123",
+                "object": "checkout.session",
+                "after_expiration": null,
+                "allow_promotion_codes": false,
+                "amount_subtotal": 1200,
+                "amount_total": 1200,
+                "automatic_tax": {
+                  "enabled": false,
+                  "status": null
+                },
+                "billing_address_collection": "auto",
+                "cancel_url": "https://stripe.com",
+                "client_reference_id": null,
+                "consent": null,
+                "consent_collection": {
+                  "promotions": "none",
+                  "terms_of_service": "none"
+                },
+                "created": 1694345788,
+                "currency": "usd",
+                "currency_conversion": null,
+                "custom_fields": [],
+                "custom_text": {
+                  "shipping_address": null,
+                  "submit": null
+                },
+                "customer": null,
+                "customer_creation": "if_required",
+                "customer_details": {
+                  "address": {
+                    "city": null,
+                    "country": "XX",
+                    "line1": null,
+                    "line2": null,
+                    "postal_code": null,
+                    "state": null
+                  },
+                  "email": "abc@xyz.com",
+                  "name": "XYZ",
+                  "phone": null,
+                  "tax_exempt": "none",
+                  "tax_ids": []
+                },
+                "customer_email": null,
+                "expires_at": 1694432187,
+                "invoice": null,
+                "invoice_creation": {
+                  "enabled": false,
+                  "invoice_data": {
+                    "account_tax_ids": null,
+                    "custom_fields": null,
+                    "description": null,
+                    "footer": null,
+                    "metadata": {},
+                    "rendering_options": null
+                  }
+                },
+                "livemode": false,
+                "locale": "auto",
+                "metadata": {},
+                "mode": "payment",
+                "payment_intent": "pi_123",
+                "payment_link": "plink_123",
+                "payment_method_collection": "always",
+                "payment_method_options": {},
+                "payment_method_types": [
+                  "card"
+                ],
+                "payment_status": "paid",
+                "phone_number_collection": {
+                  "enabled": false
+                },
+                "recovered_from": null,
+                "setup_intent": null,
+                "shipping": null,
+                "shipping_address_collection": null,
+                "shipping_options": [],
+                "shipping_rate": null,
+                "status": "complete",
+                "submit_type": "auto",
+                "subscription": null,
+                "success_url": "https://stripe.com",
+                "total_details": {
+                  "amount_discount": 0,
+                  "amount_shipping": 0,
+                  "amount_tax": 0
+                },
+                "url": null
+              }
+            },
+            "livemode": false,
+            "pending_webhooks": 1,
+            "request": {
+              "id": null,
+              "idempotency_key": null
+            },
+            "type": "checkout.session.completed"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "IF": {
+      "main": [
+        [
+          {
+            "node": "Execute Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command": {
+      "main": [
+        [
+          {
+            "node": "Function",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Function": {
+      "main": [
+        [
+          {
+            "node": "AWS SES",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "id": 4,
+  "meta": {
+    "instanceId": "47a9a52f0b2b9414c9a80598c836b42a51cbda3cdbd3add0ef3dc5065689cb5b"
+  },
+  "tags": []
+}
