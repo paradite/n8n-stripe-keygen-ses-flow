@@ -18,7 +18,7 @@ There is no guarantee that this flow will work for you.
 
 ![stripe webhook](/images/stripe-webhook.png)
 
-- Setup credentials for AWS in n8n.
+- Setup AWS SES and enter credentials for AWS in n8n.
 
 ![credentials](/images/credentials.png)
 
