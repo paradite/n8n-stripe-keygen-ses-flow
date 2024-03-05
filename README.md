@@ -36,8 +36,6 @@ There is no guarantee that this flow will work for you.
 
 > Using HTTP Request node should also be possible, but I couldn't make it work.
 
-> You should be able to name your license here, but I skipped it. Please send a PR if you got it working.
-
 ```sh
 curl -X POST https://api.keygen.sh/v1/accounts/123/licenses \
   -H 'Content-Type: application/vnd.api+json' \
@@ -52,6 +50,7 @@ curl -X POST https://api.keygen.sh/v1/accounts/123/licenses \
             }
           },
           "attributes": {
+            "name": "{{$node["Webhook"].json["body"]["data"]["object"]["customer_details"]["email"]}}",
             "metadata": {
               "customerEmail": "{{$node["Webhook"].json["body"]["data"]["object"]["customer_details"]["email"]}}"
             }

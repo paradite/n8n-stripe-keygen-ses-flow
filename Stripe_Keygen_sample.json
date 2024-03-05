@@ -80,7 +80,7 @@
     {
       "parameters": {
         "executeOnce": false,
-        "command": "=curl -X POST https://api.keygen.sh/v1/accounts/123/licenses \\\n  -H 'Content-Type: application/vnd.api+json' \\\n  -H 'Accept: application/vnd.api+json' \\\n  -H 'Authorization: Bearer prod-123' \\\n  -d '{\n        \"data\": {\n          \"type\": \"licenses\",\n          \"relationships\": {\n            \"policy\": {\n              \"data\": { \"type\": \"policies\", \"id\": \"123\" }\n            }\n          },\n          \"attributes\": {\n            \"metadata\": {\n              \"customerEmail\": \"{{$node[\"Webhook\"].json[\"body\"][\"data\"][\"object\"][\"customer_details\"][\"email\"]}}\"\n            }\n          }\n        }\n      }'"
+        "command": "=curl -X POST https://api.keygen.sh/v1/accounts/123/licenses \\\n  -H 'Content-Type: application/vnd.api+json' \\\n  -H 'Accept: application/vnd.api+json' \\\n  -H 'Authorization: Bearer prod-123' \\\n  -d '{\n        \"data\": {\n          \"type\": \"licenses\",\n          \"relationships\": {\n            \"policy\": {\n              \"data\": { \"type\": \"policies\", \"id\": \"123\" }\n            }\n          },\n          \"attributes\": {\n            \"name\": \"{{$node[\"Webhook\"].json[\"body\"][\"data\"][\"object\"][\"customer_details\"][\"email\"]}}\",\n            \"metadata\": {\n              \"customerEmail\": \"{{$node[\"Webhook\"].json[\"body\"][\"data\"][\"object\"][\"customer_details\"][\"email\"]}}\"\n            }\n          }\n        }\n      }'"
       },
       "id": "0ac27751-bacf-4b0b-9d49-bc996e5d3d89",
       "name": "Execute Command",
